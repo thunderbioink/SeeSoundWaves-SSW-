@@ -14,9 +14,9 @@ print_ana()
 printDavid()
 
 
-# import os
-# print('current directory')
-# print(os.getcwd())
+import os
+print('current directory')
+print(os.getcwd())
 
-# print(1*2)
-# print(2**3)
+print(1*2)
+print(2**3)
