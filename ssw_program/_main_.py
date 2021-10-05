@@ -4,6 +4,7 @@ from emma import print_emma
 from josh import print_josh
 from ana import print_ana
 from david import printDavid
+import time
 
 print_welcome()
 print_alma()
