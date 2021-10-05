@@ -1,14 +1,14 @@
 from welcome import print_welcome
 from alma import print_alma
 from emma import print_emma
-from josh import print_Josh
+from josh import print_josh
 
 
 
 print_welcome()
 print_alma()
 print_emma()
-print_Josh()
+print_josh()
 
 
 
