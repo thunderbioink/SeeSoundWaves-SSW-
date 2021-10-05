@@ -1,11 +1,13 @@
 from welcome import print_welcome
 from alma import print_alma
+from emma import print_emma
 
 
 
 
 print_welcome()
 print_alma()
+print_emma()
 
 
 
