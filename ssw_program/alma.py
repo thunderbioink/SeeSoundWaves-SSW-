@@ -1,7 +1,7 @@
-def print_alma():
-        print("Hello!This is Alma Camarillo! ")
+# def print_alma():
+#         print("Hello!This is Alma Camarillo! ")
     
-    # python hello_program
+#     # python hello_program
     
     
 
@@ -10,8 +10,8 @@ def print_alma():
 # print('current directory')
 # print(os.getcwd())
 
-print(1*2)
-print(2**3)
+# print(1*2)
+# print(2**3)
 
 
 # import wave, struct
@@ -60,7 +60,26 @@ from glob import glob
 
 import librosa as lr
 
-# continue here
+# continue here to create directory path for source files
+
+data_dir = '.\ssw_program\wav_files'
+
+audio_files = glob(data_dir + '/*.wav')
+
+# len(audio_files)
+
+audio, sfreq = lr.load(audio_files[0])
+time = np.arange(0, len(audio)) / sfreq 
+
+
+fig, ax = plt.subplots()
+ax.plot(time, audio)
+ax.set(xlabel ='Time (s)', ylabel= 'Sound Amplitude')
+
+plt.show()
+
+
+
 
 
 
