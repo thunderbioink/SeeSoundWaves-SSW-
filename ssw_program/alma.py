@@ -152,7 +152,7 @@ try:
         args.samplerate = int(device_info['default_samplerate'])
     if args.filename is None:
         args.filename = tempfile.mktemp(prefix='delme_rec_unlimited_',
-                                        suffix='.wav', dir='')
+                                        suffix='.wav', dir='.\ssw_program\wav_files')
 
     # Make sure the file is opened before recording anything:
     with sf.SoundFile(args.filename, mode='x', samplerate=args.samplerate,
@@ -187,7 +187,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from glob import glob
-import py audio
+import pyaudio
 import librosa as lr
 
 # continue here to create directory path for source files
