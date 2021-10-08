@@ -1,7 +1,7 @@
 # Just testing things out to get the video/ img to show up in python
 
 import numpy as np
-import cv2 as cv
+import cv2
 
 cap = cv2.VideoCapture('videos/wa.avi')
 while(cap.isOpened()):
