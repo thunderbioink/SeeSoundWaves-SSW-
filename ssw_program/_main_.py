@@ -1,5 +1,4 @@
 from welcome import print_welcome
-
 from emma import print_emma
 from josh import print_josh
 from ana import print_ana
@@ -24,7 +23,6 @@ for i in range(0, length):
     data = struct.unpack('<48000h', wave_data) 
     
     print(int(data[0]))
-
 
 
 import soundfile as sf
