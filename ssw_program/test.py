@@ -14,6 +14,21 @@ import numpy as np
 import sounddevice as sd
 
 
+from scipy.io.wavfile import write
+import time
+import cv2
+
+start_time = time.time()
+fs = 44100  # Sample rate
+seconds = 10  # Duration of recording
+
+start = time.time()
+print("Recording in progress.")
+
+  
+
+
+
 def int_or_str(text):
     """Helper function for argument parsing."""
     try:
@@ -117,5 +132,10 @@ try:
         plt.show()
 except Exception as e:
     parser.exit(type(e).__name__ + ': ' + str(e))
-    
-    
+
+
+end = time.time()
+myrecording = sd.rec(int((end-start) * fs), samplerate=fs, channels=2)
+sd.wait()  # Wait until recording is finished
+write('output.wav', fs, myrecording)  # Save as WAV file 
+
