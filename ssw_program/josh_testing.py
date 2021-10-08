@@ -16,5 +16,5 @@ cv2.destroyAllWindows()
 
 
 from playsound import playsound
-playsound('Documents\GitHub\SeeSoundWaves-SSW-\ssw_program\wav_files\Blue.wav')
+playsound('Documents\GitHub\SeeSoundWaves-SSW-\ssw_program\wav_files\Blue')
 
