@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 from threading import Thread
 from datetime import datetime
@@ -20,6 +21,8 @@ def main():
     while not os.path.exists(f"{filename}.mp4"):
         pass
     os.rename(f"{filename}.mp4", f"ssw_program\\sound_spectrum\\{filename}.mp4")
+    # while "ffmpeg" in (subprocess):
+        # pass
     os.remove("output.wav")
     os.remove("output.avi")
     
