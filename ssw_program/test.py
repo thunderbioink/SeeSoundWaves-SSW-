@@ -1,7 +1,6 @@
 import argparse
 import queue
 import sys
-
 from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,17 +10,14 @@ import time
 import cv2
 
 fs = 44100 
-
 start = time.time()
 print("Recording in progress")
-
 
 def check(text):
     try:
         return int(text)
     except ValueError:
         return text
-
 
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument(
@@ -60,13 +56,11 @@ if any(c < 1 for c in args.channels):
 mapping = [c - 1 for c in args.channels]  # Channel numbers start with 1
 q = queue.Queue()
 
-
 def audio(indata, frames, time, status):
     if status:
         print(status, file=sys.stderr)
     # Fancy indexing with mapping creates a (necessary!) copy:
     q.put(indata[::args.downsample, mapping])
-
 
 def update_plot(frame):
     global plotdata
@@ -81,7 +75,6 @@ def update_plot(frame):
     for column, line in enumerate(lines):
         line.set_ydata(plotdata[:, column])
     return lines
-
 
 try:
     if args.samplerate is None:
@@ -112,11 +105,9 @@ try:
 except Exception as e:
     parser.exit(type(e).__name__ + ': ' + str(e))
 
-
 print("Recording complete")
 end = time.time()
 myrecording = sd.rec(int((end-start) * fs), samplerate=fs, channels=2)
 sd.wait()
-print("Recording complete")
 write('audio.wav', fs, myrecording)  
 
