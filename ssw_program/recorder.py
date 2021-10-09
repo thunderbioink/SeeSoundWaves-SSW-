@@ -16,17 +16,20 @@ class Recorder:
 
     def __init__(self):
         self.start_time = time.time()
-        self.fs = 44100 
+        self.fs = 44100  # Sample rate
+        self.seconds = 10  # Duration of recording
 
 
-    def check(self, text):
+    def int_or_str(self, text):
+        """Helper function for argument parsing."""
         try:
             return int(text)
         except ValueError:
             return text
 
 
-    def audio_cb(self, indata, frames, time, status):
+    def audio_callback(self, indata, frames, time, status):
+        """This is called (from a separate thread) for each audio block."""
         if status:
             print(status, file=sys.stderr)
         # Fancy indexing with mapping creates a (necessary!) copy:
@@ -34,6 +37,12 @@ class Recorder:
 
 
     def update_plot(self, frame):
+        """This is called by matplotlib for each plot update.
+
+        Typically, audio callbacks happen more frequently than plot updates,
+        therefore the queue tends to contain multiple blocks of audio data.
+
+        """
         while True:
             try:
                 data = self.q.get_nowait()
@@ -48,7 +57,7 @@ class Recorder:
 
     def record(self):
         self.start = time.time()
-        print("Recording in progress")
+        print("Recording in progress.")
 
         self.parser = argparse.ArgumentParser(add_help=False)
         self.parser.add_argument(
@@ -66,7 +75,7 @@ class Recorder:
             'channels', type=int, default=[1], nargs='*', metavar='CHANNEL',
             help='input channels to plot (default: the first)')
         self.parser.add_argument(
-            '-d', '--device', type=self.check,
+            '-d', '--device', type=self.int_or_str,
             help='input device (numeric ID or substring)')
         self.parser.add_argument(
             '-w', '--window', type=float, default=200, metavar='DURATION',
@@ -111,7 +120,7 @@ class Recorder:
 
             stream = sd.InputStream(
                 device=self.args.device, channels=max(self.args.channels),
-                samplerate=self.args.samplerate, callback=self.audio_cb)
+                samplerate=self.args.samplerate, callback=self.audio_callback)
             ani = FuncAnimation(fig, self.update_plot, interval=self.args.interval, blit=True)
             with stream:
                 plt.show()
@@ -121,6 +130,6 @@ class Recorder:
 
         self.end = time.time()
         self.myrecording = sd.rec(int((self.end-self.start) * self.fs), samplerate=self.fs, channels=2)
-        sd.wait() 
-        write('output.wav', self.fs, self.myrecording)
+        sd.wait()  # Wait until recording is finished
+        write('output.wav', self.fs, self.myrecording)  # Save as WAV file 
 
