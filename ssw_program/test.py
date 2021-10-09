@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""Plot the live microphone signal(s) with matplotlib.
-
-Matplotlib and NumPy have to be installed.
-
-"""
 import argparse
 import queue
 import sys
@@ -12,25 +6,17 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 import numpy as np
 import sounddevice as sd
-
-
 from scipy.io.wavfile import write
 import time
 import cv2
 
-start_time = time.time()
-fs = 44100  # Sample rate
-seconds = 10  # Duration of recording
+fs = 44100 
 
 start = time.time()
-print("Recording in progress.")
-
-  
+print("Recording in progress")
 
 
-
-def int_or_str(text):
-    """Helper function for argument parsing."""
+def check(text):
     try:
         return int(text)
     except ValueError:
@@ -53,7 +39,7 @@ parser.add_argument(
     'channels', type=int, default=[1], nargs='*', metavar='CHANNEL',
     help='input channels to plot (default: the first)')
 parser.add_argument(
-    '-d', '--device', type=int_or_str,
+    '-d', '--device', type=check,
     help='input device (numeric ID or substring)')
 parser.add_argument(
     '-w', '--window', type=float, default=200, metavar='DURATION',
@@ -75,8 +61,7 @@ mapping = [c - 1 for c in args.channels]  # Channel numbers start with 1
 q = queue.Queue()
 
 
-def audio_callback(indata, frames, time, status):
-    """This is called (from a separate thread) for each audio block."""
+def audio(indata, frames, time, status):
     if status:
         print(status, file=sys.stderr)
     # Fancy indexing with mapping creates a (necessary!) copy:
@@ -84,12 +69,6 @@ def audio_callback(indata, frames, time, status):
 
 
 def update_plot(frame):
-    """This is called by matplotlib for each plot update.
-
-    Typically, audio callbacks happen more frequently than plot updates,
-    therefore the queue tends to contain multiple blocks of audio data.
-
-    """
     global plotdata
     while True:
         try:
@@ -126,7 +105,7 @@ try:
 
     stream = sd.InputStream(
         device=args.device, channels=max(args.channels),
-        samplerate=args.samplerate, callback=audio_callback)
+        samplerate=args.samplerate, callback=audio)
     ani = FuncAnimation(fig, update_plot, interval=args.interval, blit=True)
     with stream:
         plt.show()
@@ -134,8 +113,10 @@ except Exception as e:
     parser.exit(type(e).__name__ + ': ' + str(e))
 
 
+print("Recording complete")
 end = time.time()
 myrecording = sd.rec(int((end-start) * fs), samplerate=fs, channels=2)
-sd.wait()  # Wait until recording is finished
-write('output.wav', fs, myrecording)  # Save as WAV file 
+sd.wait()
+print("Recording complete")
+write('audio.wav', fs, myrecording)  
 
