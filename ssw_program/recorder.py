@@ -45,7 +45,7 @@ class Recorder:
             line.set_ydata(self.plotdata[:, column])
         return self.lines
 
-    def record(self):
+    def record(self, scrdControl):
         self.start = time.time()
         print("Recording in progress.")
 
@@ -120,6 +120,7 @@ class Recorder:
         
         self.end = time.time()
         print("Recording complete")
+        scrdControl.record = False
         self.myrecording = sd.rec(int((self.end-self.start) * self.fs), samplerate=self.fs, channels=2)
         sd.wait() 
         write('output.wav', self.fs, self.myrecording) 
