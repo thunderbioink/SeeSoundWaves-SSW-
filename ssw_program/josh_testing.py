@@ -3,7 +3,7 @@
 import numpy as np
 import cv2
 
-cap = cv2.VideoCapture('wav_files\Blue.wav')
+cap = cv2.VideoCapture('C:\\Users\\joshu\\Dropbox\\My PC (JoshuaZob-Center)\\Desktop\\HackAthon\\drop.avi')
 while(cap.isOpened()):
   ret, frame = cap.read()
   gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
