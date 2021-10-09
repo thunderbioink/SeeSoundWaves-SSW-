@@ -119,6 +119,7 @@ class Recorder:
 
         
         self.end = time.time()
+        scrdControl.record = False
         print("Recording complete")
         scrdControl.record = False
         self.myrecording = sd.rec(int((self.end-self.start) * self.fs), samplerate=self.fs, channels=2)
