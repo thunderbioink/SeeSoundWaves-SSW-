@@ -18,6 +18,7 @@ def main():
     os.system(f"ssw_program\\bin\\ffmpeg.exe -i output.avi -i output.wav -map 0:v -map 1:a -c:v copy -shortest output-{datetime.today().strftime('%Y-%m-%d-%H%M%S')}.mp4")
     os.remove("output.wav")
     os.remove("output.avi")
-
+    
+    
 if __name__ == "__main__":
     main()
