@@ -16,8 +16,7 @@ class Recorder:
 
     def __init__(self):
         self.start_time = time.time()
-        self.fs = 44100  # Sample rate
-        self.seconds = 10  # Duration of recording
+        self.fs = 44100
 
 
     def int_or_str(self, text):
@@ -32,7 +31,6 @@ class Recorder:
         """This is called (from a separate thread) for each audio block."""
         if status:
             print(status, file=sys.stderr)
-        # Fancy indexing with mapping creates a (necessary!) copy:
         self.q.put(indata[::self.args.downsample, self.mapping])
 
 
@@ -127,9 +125,9 @@ class Recorder:
         except Exception as e:
             self.parser.exit(type(e).__name__ + ': ' + str(e))
 
-
+        print("Recording complete")
         self.end = time.time()
         self.myrecording = sd.rec(int((self.end-self.start) * self.fs), samplerate=self.fs, channels=2)
-        sd.wait()  # Wait until recording is finished
-        write('output.wav', self.fs, self.myrecording)  # Save as WAV file 
+        sd.wait() 
+        write('output.wav', self.fs, self.myrecording) 
 
