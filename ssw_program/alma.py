@@ -17,10 +17,14 @@ blue_unmastered_soundwave = blue_unmastered.readframes(-1)
 
 # 4th step, view the wav file in byte form
 
-blue_unmastered_soundwave
+# blue_unmastered_soundwave 
 
-# 5th step
-signal_gm = np.frombuffer(blue_unmastered_soundwave)    
+# 5th step turn fiel from byte into integers 
+blue_unmastered = np.frombuffer(blue_unmastered_soundwave, dtype='int16')
+
+# Show 1st 10 items
+signal_gm[:10]
+
     
 
 
