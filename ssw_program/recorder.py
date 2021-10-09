@@ -19,28 +19,20 @@ class Recorder:
         self.fs = 44100
 
 
-    def int_or_str(self, text):
-        """Helper function for argument parsing."""
+    def check(self, text):
         try:
             return int(text)
         except ValueError:
             return text
 
 
-    def audio_callback(self, indata, frames, time, status):
-        """This is called (from a separate thread) for each audio block."""
+    def audio_cb(self, indata, frames, time, status):
         if status:
             print(status, file=sys.stderr)
         self.q.put(indata[::self.args.downsample, self.mapping])
 
 
     def update_plot(self, frame):
-        """This is called by matplotlib for each plot update.
-
-        Typically, audio callbacks happen more frequently than plot updates,
-        therefore the queue tends to contain multiple blocks of audio data.
-
-        """
         while True:
             try:
                 data = self.q.get_nowait()
@@ -53,7 +45,7 @@ class Recorder:
             line.set_ydata(self.plotdata[:, column])
         return self.lines
 
-    def record(self, scrdControl):
+    def record(self):
         self.start = time.time()
         print("Recording in progress.")
 
@@ -73,7 +65,7 @@ class Recorder:
             'channels', type=int, default=[1], nargs='*', metavar='CHANNEL',
             help='input channels to plot (default: the first)')
         self.parser.add_argument(
-            '-d', '--device', type=self.int_or_str,
+            '-d', '--device', type=self.check,
             help='input device (numeric ID or substring)')
         self.parser.add_argument(
             '-w', '--window', type=float, default=200, metavar='DURATION',
@@ -118,16 +110,16 @@ class Recorder:
 
             stream = sd.InputStream(
                 device=self.args.device, channels=max(self.args.channels),
-                samplerate=self.args.samplerate, callback=self.audio_callback)
+                samplerate=self.args.samplerate, callback=self.audio_cb)
             ani = FuncAnimation(fig, self.update_plot, interval=self.args.interval, blit=True)
             with stream:
                 plt.show()
         except Exception as e:
             self.parser.exit(type(e).__name__ + ': ' + str(e))
 
-        print("Recording complete")
-        scrdControl.record = False
+        
         self.end = time.time()
+        print("Recording complete")
         self.myrecording = sd.rec(int((self.end-self.start) * self.fs), samplerate=self.fs, channels=2)
         sd.wait() 
         write('output.wav', self.fs, self.myrecording) 
