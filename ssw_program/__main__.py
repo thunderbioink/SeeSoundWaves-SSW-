@@ -15,7 +15,11 @@ def main():
     recorder.record(scr)
     video.join()
 
-    os.system(f"ssw_program\\bin\\ffmpeg.exe -i output.avi -i output.wav -map 0:v -map 1:a -c:v copy -shortest output-{datetime.today().strftime('%Y-%m-%d-%H%M%S')}.mp4")
+    filename = f"output-{datetime.today().strftime('%Y-%m-%d-%H%M%S')}"
+    os.system(f"ssw_program\\bin\\ffmpeg.exe -i output.avi -i output.wav -map 0:v -map 1:a -c:v copy -shortest {filename}.mp4")
+    while not os.path.exists(f"{filename}.mp4"):
+        pass
+    os.rename(f"{filename}.mp4", f"ssw_program\\sound_spectrum\\{filename}.mp4")
     os.remove("output.wav")
     os.remove("output.avi")
 
